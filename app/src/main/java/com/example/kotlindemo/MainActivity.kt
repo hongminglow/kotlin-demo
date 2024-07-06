@@ -1,5 +1,6 @@
 package com.example.kotlindemo
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+       /* setSupportActionBar(binding.toolbar)*/
 
         val navView: BottomNavigationView = binding.navView
 
@@ -31,5 +33,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // Handle back button click on toolbar
+//        binding.toolbar.setNavigationOnClickListener {
+//            // Navigate back to LoginActivity
+//            val intent = Intent(this, LoginActivity::class.java)
+//            startActivity(intent)
+//            finish() // Close MainActivity
+//        }
     }
 }
