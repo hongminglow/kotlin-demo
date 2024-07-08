@@ -15,6 +15,7 @@ import com.example.kotlindemo.data.User
 import com.example.kotlindemo.databinding.FragmentHomeBinding
 import com.example.kotlindemo.ui.login.LoginViewModel
 
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -23,6 +24,8 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var loginViewModel: LoginViewModel
+//    private lateinit var userViewModel: HomeViewModel
+//    private lateinit var userRepository: UserRepository
 
     companion object {
         private const val username_tag = "Username"
@@ -34,10 +37,15 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Initialize Repository
+//        val apiService = RetrofitClient.apiService
+//        userRepository = UserRepository(apiService)
+
+        //Initialize View Model
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-
+//        userViewModel = ViewModelProvider(this, HomeViewModelFactory(userRepository)).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -53,6 +61,11 @@ class HomeFragment : Fragment() {
             Log.d(home_tag, "The ans is...$it")
             textView.text = it
         }
+
+//        userViewModel.userLists.observe(viewLifecycleOwner, { users ->
+//            Log.d("User List", "User lists..$users")
+//        })
+
 
         // Observe changes in username LiveData
         loginViewModel.username.observe(viewLifecycleOwner) { username ->

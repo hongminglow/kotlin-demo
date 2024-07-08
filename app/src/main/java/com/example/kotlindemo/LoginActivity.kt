@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
                 // Authentication successful, navigate to MainActivity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                finish() // Prevent going back to login screen
+//                finish() // Prevent going back to login screen
             } else {
                 // Show authentication failed message
             }
