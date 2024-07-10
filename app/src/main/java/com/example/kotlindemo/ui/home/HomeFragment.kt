@@ -8,13 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ViewFlipper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlindemo.LoginActivity
 import com.example.kotlindemo.data.User
 import com.example.kotlindemo.databinding.FragmentHomeBinding
 import com.example.kotlindemo.ui.login.LoginViewModel
-
+import com.example.kotlindemo.R
 
 class HomeFragment : Fragment() {
 
@@ -53,6 +54,7 @@ class HomeFragment : Fragment() {
         val textView: TextView = binding.textHome
         val usernameView: TextView = binding.username
         val user = getUserData(requireContext())
+
 
         Log.d("Shared preference..", "Username : ${user?.username}")
 
@@ -105,5 +107,36 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val userInformation: TextView = view.findViewById(R.id.user_information)
+        val userDetails: TextView = view.findViewById(R.id.user_details)
+        val applicationDetails: TextView = view.findViewById(R.id.application_details)
+        val viewFlipper: ViewFlipper = view.findViewById(R.id.view_flipper)
+        val backButton : TextView = view.findViewById(R.id.back_button)
+
+        userInformation.setOnClickListener {
+            viewFlipper.displayedChild = 1
+        }
+
+        userDetails.setOnClickListener {
+            viewFlipper.displayedChild = 2
+        }
+
+        applicationDetails.setOnClickListener {
+            viewFlipper.displayedChild = 3
+        }
+
+        backButton.setOnClickListener {
+            viewFlipper.displayedChild = 0
+        }
+
+        // Optionally, set the default view
+        viewFlipper.displayedChild = 0
+
+
     }
 }
