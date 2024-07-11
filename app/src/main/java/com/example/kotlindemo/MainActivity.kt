@@ -1,7 +1,10 @@
 package com.example.kotlindemo
 
+import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.kotlindemo.components.IconSwitcher
 import com.example.kotlindemo.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
        /* setSupportActionBar(binding.toolbar)*/
@@ -38,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.btnChangeIcon.setOnClickListener {
+            switchIcon("com.example.kotlindemo.BPMainActivity")
+        }
 
         // Handle back button click on toolbar
 //        binding.toolbar.setNavigationOnClickListener {
@@ -72,5 +81,32 @@ class MainActivity : AppCompatActivity() {
 
         return true
         return true
+    }
+
+    private fun switchIcon(componentName: String) {
+        val pm: PackageManager = applicationContext.packageManager
+
+        // List of all alias component names
+        val aliases = listOf(
+            "com.example.kotlindemo.BPMainActivity",
+            "com.example.kotlindemo.PassMainActivity"
+            // Add more aliases as needed
+        )
+
+        // Disable all aliases
+        for (alias in aliases) {
+            pm.setComponentEnabledSetting(
+                ComponentName(applicationContext, alias),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
+
+        // Enable the selected alias
+        pm.setComponentEnabledSetting(
+            ComponentName(applicationContext, componentName),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 }
