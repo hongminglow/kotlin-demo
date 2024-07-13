@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.ViewFlipper
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlindemo.LoginActivity
@@ -52,7 +55,6 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
-        val usernameView: TextView = binding.username
         val user = getUserData(requireContext())
 
 
@@ -69,11 +71,6 @@ class HomeFragment : Fragment() {
 //        })
 
 
-        // Observe changes in username LiveData
-        loginViewModel.username.observe(viewLifecycleOwner) { username ->
-            Log.d(username_tag, "Username updated: $username")
-            usernameView.text = username ?: "Guest"  // Default text if username is null
-        }
 
         binding.logOutButton.setOnClickListener {
             logout()
@@ -111,12 +108,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val cardView: CardView = view.findViewById(R.id.user_profile_switcher_tab)
         val userInformation: TextView = view.findViewById(R.id.user_information)
         val userDetails: TextView = view.findViewById(R.id.user_details)
         val applicationDetails: TextView = view.findViewById(R.id.application_details)
         val viewFlipper: ViewFlipper = view.findViewById(R.id.view_flipper)
         val backButton : TextView = view.findViewById(R.id.back_button)
+        val backButton2 : TextView = view.findViewById(R.id.back_button_2)
+        val backButton3 : TextView = view.findViewById(R.id.back_button_3)
 
         userInformation.setOnClickListener {
             viewFlipper.displayedChild = 1
@@ -124,6 +123,7 @@ class HomeFragment : Fragment() {
 
         userDetails.setOnClickListener {
             viewFlipper.displayedChild = 2
+            adjustCardViewHeight(cardView, true)
         }
 
         applicationDetails.setOnClickListener {
@@ -134,9 +134,45 @@ class HomeFragment : Fragment() {
             viewFlipper.displayedChild = 0
         }
 
+        backButton2.setOnClickListener {
+            viewFlipper.displayedChild = 0
+            adjustCardViewHeight(cardView, false)
+        }
+
+        backButton3.setOnClickListener {
+            viewFlipper.displayedChild = 0
+        }
+
         // Optionally, set the default view
         viewFlipper.displayedChild = 0
 
 
+    }
+
+
+    private fun adjustCardViewHeight(cardView: CardView, changeLayout:Boolean) {
+
+        //based on the flip content view to auto adjust the content
+//        val currentView = viewFlipper.currentView
+//        currentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+//        val height = currentView.measuredHeight
+//        cardView.layoutParams.height = height
+//        cardView.requestLayout()
+
+        if(changeLayout){
+            cardView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }else{
+            // Convert 190dp to pixels
+            val heightInDp = 190
+            val heightInPx = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                heightInDp.toFloat(),
+                resources.displayMetrics
+            ).toInt()
+
+            // Set the height of the CardView directly
+            cardView.layoutParams.height = heightInPx
+        }
+        cardView.requestLayout()
     }
 }
