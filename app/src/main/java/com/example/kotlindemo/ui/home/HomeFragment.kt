@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -15,6 +18,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlindemo.LoginActivity
+import com.example.kotlindemo.MainActivity
 import com.example.kotlindemo.data.User
 import com.example.kotlindemo.databinding.FragmentHomeBinding
 import com.example.kotlindemo.ui.login.LoginViewModel
@@ -28,6 +32,9 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var viewFlipper: ViewFlipper
+
+    private var backButtonVisible  = false
 //    private lateinit var userViewModel: HomeViewModel
 //    private lateinit var userRepository: UserRepository
 
@@ -49,12 +56,14 @@ class HomeFragment : Fragment() {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+
 //        userViewModel = ViewModelProvider(this, HomeViewModelFactory(userRepository)).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
+        viewFlipper = binding.root.findViewById(R.id.view_flipper)
         val user = getUserData(requireContext())
 
 
@@ -75,6 +84,7 @@ class HomeFragment : Fragment() {
         binding.logOutButton.setOnClickListener {
             logout()
         }
+
         return root
     }
 
@@ -112,35 +122,40 @@ class HomeFragment : Fragment() {
         val userInformation: TextView = view.findViewById(R.id.user_information)
         val userDetails: TextView = view.findViewById(R.id.user_details)
         val applicationDetails: TextView = view.findViewById(R.id.application_details)
-        val viewFlipper: ViewFlipper = view.findViewById(R.id.view_flipper)
         val backButton : TextView = view.findViewById(R.id.back_button)
         val backButton2 : TextView = view.findViewById(R.id.back_button_2)
         val backButton3 : TextView = view.findViewById(R.id.back_button_3)
 
         userInformation.setOnClickListener {
             viewFlipper.displayedChild = 1
+            (activity as MainActivity).updateBackButtonVisibility(true)
         }
 
         userDetails.setOnClickListener {
             viewFlipper.displayedChild = 2
+            (activity as MainActivity).updateBackButtonVisibility(true)
             adjustCardViewHeight(cardView, true)
         }
 
         applicationDetails.setOnClickListener {
             viewFlipper.displayedChild = 3
+            (activity as MainActivity).updateBackButtonVisibility(true)
         }
 
         backButton.setOnClickListener {
             viewFlipper.displayedChild = 0
+            (activity as MainActivity).updateBackButtonVisibility(false)
         }
 
         backButton2.setOnClickListener {
             viewFlipper.displayedChild = 0
+            (activity as MainActivity).updateBackButtonVisibility(false)
             adjustCardViewHeight(cardView, false)
         }
 
         backButton3.setOnClickListener {
             viewFlipper.displayedChild = 0
+            (activity as MainActivity).updateBackButtonVisibility(false)
         }
 
         // Optionally, set the default view
@@ -148,7 +163,6 @@ class HomeFragment : Fragment() {
 
 
     }
-
 
     private fun adjustCardViewHeight(cardView: CardView, changeLayout:Boolean) {
 
@@ -174,5 +188,10 @@ class HomeFragment : Fragment() {
             cardView.layoutParams.height = heightInPx
         }
         cardView.requestLayout()
+    }
+
+    fun backToFirstView() {
+        Log.d("OptionsMenu", "Revert back..")
+        viewFlipper.displayedChild = 0 // Display the first child view
     }
 }

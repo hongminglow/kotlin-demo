@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    <item-->
+<!--        android:id="@+id/action_back"-->
+<!--        android:icon="@drawable/ic_chevron_left"-->
+<!--        android:title="Back"-->
+<!--        android:gravity="start"-->
+<!--        app:showAsAction="always" />-->
+
     <item
         android:id="@+id/action_custom"
         android:title=""
