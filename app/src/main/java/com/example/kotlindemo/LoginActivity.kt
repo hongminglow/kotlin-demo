@@ -1,5 +1,6 @@
 package com.example.kotlindemo
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -37,14 +38,20 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            if (viewModel.authenticate(username, password, this)) {
-                // Authentication successful, navigate to MainActivity
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-//                finish() // Prevent going back to login screen
-            } else {
-                // Show authentication failed message
+//            if (viewModel.authenticate(username, password, this)) {
+//                // Authentication successful, navigate to MainActivity
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
+////                finish() // Prevent going back to login screen
+//            } else {
+//                // Show authentication failed message
+//            }
+
+            val intent = Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
+            startActivity(intent)
+            finish()
         }
     }
 

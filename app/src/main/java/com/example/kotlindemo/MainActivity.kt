@@ -1,6 +1,7 @@
 package com.example.kotlindemo
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -120,31 +121,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun switchIcon(componentName: String) {
-        val pm: PackageManager = applicationContext.packageManager
+//    private fun switchIcon(componentName: String) {
+//        val pm: PackageManager = applicationContext.packageManager
+//        Log.d("SwitchIcon", "Attempting to switch icon to: $componentName")
+//
+//        // List of all alias component names
+//        val aliases = listOf(
+//            "com.example.kotlindemo.LoginActivity",
+//            "com.example.kotlindemo.BPMainActivity",
+//            "com.example.kotlindemo.PassMainActivity"
+//            // Add more aliases as needed
+//        )
+//
+//        // Disable all aliases
+//        for (alias in aliases) {
+//            try {
+//                pm.setComponentEnabledSetting(
+//                    ComponentName(applicationContext, alias),
+//                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+//                    PackageManager.DONT_KILL_APP
+//                )
+//                Log.d("SwitchIcon", "Disabled alias: $alias")
+//            } catch (e: Exception) {
+//                Log.e("SwitchIcon", "Failed to disable alias: $alias", e)
+//            }
+//        }
+//
+//        // Enable the selected alias
+//        try {
+//            pm.setComponentEnabledSetting(
+//                ComponentName(applicationContext, componentName),
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP
+//            )
+//            Log.d("SwitchIcon", "Enabled alias: $componentName")
+//        } catch (e: Exception) {
+//            Log.e("SwitchIcon", "Failed to enable alias: $componentName", e)
+//        }
+//    }
 
-        // List of all alias component names
-        val aliases = listOf(
-            "com.example.kotlindemo.BPMainActivity",
-            "com.example.kotlindemo.PassMainActivity"
-            // Add more aliases as needed
-        )
-
-        // Disable all aliases
-        for (alias in aliases) {
-            pm.setComponentEnabledSetting(
-                ComponentName(applicationContext, alias),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP
-            )
-        }
-
-        // Enable the selected alias
-        pm.setComponentEnabledSetting(
-            ComponentName(applicationContext, componentName),
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-            PackageManager.DONT_KILL_APP
-        )
+    private fun switchIcon(componentName: String){
+        val sharedPreferences = getSharedPreferences("GLOBAL_PREFERENCES", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("selectedApp", ".BPMainActivity")
+        editor.apply()
     }
 
     internal fun updateBackButtonVisibility(visible: Boolean) {

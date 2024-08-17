@@ -25,22 +25,44 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:parentActivityName=".LoginActivity"/>
+            android:parentActivityName=".LoginActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity-alias
             android:name=".BPMainActivity"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/ic_home_launcher"
             android:label="BP"
-            android:targetActivity=".LoginActivity" />
+            android:targetActivity=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <activity-alias
             android:name=".PassMainActivity"
             android:enabled="false"
+            android:exported="true"
             android:icon="@drawable/ic_dashboard_black_24dp"
             android:label="PASS"
-            android:targetActivity=".LoginActivity" />
+            android:targetActivity=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <service
+            android:name=".services.ChangeAppIconService"
+            android:stopWithTask="false"
+            />
     </application>
 
 </manifest>

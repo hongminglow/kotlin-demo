@@ -1,7 +1,10 @@
 package com.example.kotlindemo.ui.home
 
+import android.app.ActivityOptions
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -90,12 +93,43 @@ class HomeFragment : Fragment() {
 
     private fun logout() {
         // Perform any logout operations here (e.g., clear session, remove tokens)
+        val pm: PackageManager = requireContext().packageManager
+
+        // List of all alias component names
+        val aliases = listOf(
+            "com.example.kotlindemo.PassMainActivity"
+            // Add more aliases as needed
+        )
+
+        // Disable all aliases
+        for (alias in aliases) {
+            try {
+                pm.setComponentEnabledSetting(
+                    ComponentName(requireContext(), alias),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                Log.d("resetToLoginIcon", "Disabled alias: $alias")
+            } catch (e: Exception) {
+                Log.e("resetToLoginIcon", "Failed to disable alias: $alias", e)
+            }
+        }
+
+        pm.setComponentEnabledSetting(
+            ComponentName(requireContext(), LoginActivity::class.java),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
 
         // Navigate to LoginActivity
-        val intent = Intent(requireContext(), LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        requireActivity().finish()  // Close the current activity
+        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+            // Clear the activity stack
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+        // Start login activity and use ActivityOptions to ensure smooth transition
+        val options = ActivityOptions.makeCustomAnimation(requireContext(), android.R.anim.fade_in, android.R.anim.fade_out)
+        startActivity(intent, options.toBundle())
+        requireActivity().finish()
     }
 
     private fun getUserData(context: Context): User? {
